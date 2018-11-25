@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if user.is_active %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Отправить</button>
+        </form>
+    {% endif %}
+    {% for post in posts %}
+        <p>{{ post.text }}</p>
+        <b>{{ post.date }}</b> - {{ post.user }}
+        <hr>
+        Комментарии
+        <br>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="number" name="id" hidden value="{{ post.id }}">
+            {{ form.as_p }}
+            <button type="submit">Комментировать</button>
+        </form>
+    {% endfor %}
+
+{% endblock content %}

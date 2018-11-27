@@ -24,3 +24,12 @@ class PostView(View):
             return redirect("/")
         else:
             return HttpResponse("error")
+
+class Like(View):
+    """Ставим лайк"""
+    def post(self, request):
+        pk = request.data.get("pk")
+        post = Post.objects.get(id=pk)
+        post.like += 1
+        post.save()
+        return HttpResponse(status=201)

@@ -14,6 +14,8 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True)
+    like = models.IntegerField(default=0)
+
 
     def __str__(self):
         return "{} - {}".format(self.id, self.user)

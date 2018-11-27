@@ -1,24 +1,48 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if user.is_active %}
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Отправить</button>
-        </form>
-    {% endif %}
+    <div class="row form-twit">
+        {% if user.is_active %}
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success small">Отправить</button>
+            </form>
+        {% endif %}
+    </div>
     {% for post in posts %}
-        <p>{{ post.text }}</p>
-        <b>{{ post.date }}</b> - {{ post.user }}
-        <hr>
-        Комментарии
+        <div class="row">
+            <div class="col-12">{{ post.text }}</div>
+            <div class="col-12"><b>{{ post.date }}</b> - {{ post.user }}</div>
+            <div class="col-12">{{ post.like }} -
+                <i class="fa fa-thumbs-o-up" aria-hidden="true" onclick="like({{ post.id }})"></i>
+            </div>
+            <hr>
+        </div>
+        <div class="row">
+            Комментарии
+            <br>
+        </div>
+        {% if user.is_active %}
+            <div class="row">
+                <div class="col-12">
+                    <i class="fa fa-arrow-down" aria-hidden="true"
+                       onclick="openForm({{ post.id }})"></i>
+
+                    <i class="fa fa-arrow-up" aria-hidden="true"
+                       onclick="closeForm({{ post.id }})">
+                    </i>
+                </div>
+                <div class="col-12 comment" id="{{ post.id }}">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="number" name="id" hidden value="{{ post.id }}">
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">Комментировать</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
         <br>
-        <form action="" method="post">
-            {% csrf_token %}
-            <input type="number" name="id" hidden value="{{ post.id }}">
-            {{ form.as_p }}
-            <button type="submit">Комментировать</button>
-        </form>
     {% endfor %}
 
 {% endblock content %}

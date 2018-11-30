@@ -1,6 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from backend.app.models import Post
 from backend.app.forms import PostForm
 
@@ -25,11 +28,17 @@ class PostView(View):
         else:
             return HttpResponse("error")
 
-class Like(View):
+
+class Like(LoginRequiredMixin, View):
     """Ставим лайк"""
     def post(self, request):
-        pk = request.data.get("pk")
+        pk = request.POST.get("pk")
         post = Post.objects.get(id=pk)
-        post.like += 1
+        if request.user in post.user_like.all():
+            post.user_like.remove(User.objects.get(id=request.user.id))
+            post.like -= 1
+        else:
+            post.user_like.add(User.objects.get(id=request.user.id))
+            post.like += 1
         post.save()
         return HttpResponse(status=201)

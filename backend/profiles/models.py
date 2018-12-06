@@ -43,6 +43,16 @@ class Profile(models.Model):
             return '/media/{}'.format(self.avatar)
         else:
             return '/static/img/default.png'
+        
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
+        if self.avatar:
+            print("avatar detected")
+            img = Image.open(self.avatar.path)
+            if img.height > 150 or img.width > 150:
+                output_size = (150,150)
+                img.thumbnail(output_size)
+                img.save(self.avatar.path)    
 
 
 @receiver(post_save, sender=User)

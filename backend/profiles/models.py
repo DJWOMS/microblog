@@ -3,6 +3,25 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from django.utils import timezone
+from PIL import Image
+import os
+#
+
+
+def get_path_upload_avatar(instance,file):
+    """
+    make path of uploaded file shorter and return it
+    in following format: (media)/profile_pics/user_1/myphoto_2018-12-2.png
+    """
+    time = timezone.now().strftime("%Y-%m-%d")
+    end_extention = file.split('.')[-1]
+    head = file.split('.')[0]
+    if len(head) >10:
+        head = head[:10]
+    file_name =  head + '_' + time + '.' + end_extention
+    return os.path.join('profile_pics','user_{0},{1}').format(instance.user.id,file_name)
+
 
 class Profile(models.Model):
     """Модель профиля пользователя"""

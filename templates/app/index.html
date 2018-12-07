@@ -11,6 +11,7 @@
     {% endif %}
     {% for post in posts %}
         <div class="row">
+            <div class="col-12">{{ post.id }} - {{ post.twit }}</div>
             <div class="col-12">{{ post.text }}</div>
             <div class="col-12"><b>{{ post.date }}</b> - {{ post.user }}</div>
             <div class="col-12">{{ post.like }} -
@@ -42,6 +43,7 @@
                 </div>
             </div>
         {% endif %}
+        <hr>
         <br>
     {% endfor %}
 {% endblock content %}

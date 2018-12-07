@@ -23,7 +23,10 @@ let like = function (id) {
             pk: id,
         },
         success: (response) => {
-
+            console.log("True")
+        },
+        error: (response) => {
+            console.log("False")
         }
     })
 };

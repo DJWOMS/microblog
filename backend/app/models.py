@@ -13,7 +13,8 @@ class Post(models.Model):
         verbose_name="Твит",
         on_delete=models.SET_NULL,
         blank=True,
-        null=True)
+        null=True,
+        related_name="child")
     like = models.IntegerField(default=0)
     user_like = models.ManyToManyField(User, verbose_name="Кто лайкнул", related_name="users_like")
 
@@ -24,6 +25,7 @@ class Post(models.Model):
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
         ordering = ["id"]
+
 
 
 

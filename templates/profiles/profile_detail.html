@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <p>Welcome to your profile,
+            {% if profile.nike %}
+                {{profile.nike}}
+            {% else %}
+                {{user}}
+            {% endif %}</p>
+        <hr>
+        <p>Your avatar:</p>
+        <img class="rounded-circle" src="{{profile.get_avatar_url}}">
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'edit_profile' %}">
+            <button type="submit" class="btn btn-success btn-md" name="button">Update profile</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

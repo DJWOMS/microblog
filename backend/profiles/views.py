@@ -1,4 +1,5 @@
-from django.shortcuts import render,get_object_or_404,redirect
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Profile
 from .forms import ProfileForm
 from django.views import View
@@ -12,11 +13,8 @@ class ProfileView(LoginRequiredMixin,DetailView):
     context_object_name = 'profile'
     template_name = 'profiles/profile_detail.html'
 
-    def get_object(self,queryset=None):
-        obj = get_object_or_404 (
-            Profile,
-            user = self.request.user
-        )
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Profile, user=self.request.user)
         if obj.user != self.request.user:
             raise Http404
         return obj
@@ -27,9 +25,9 @@ class ProfileEditView(LoginRequiredMixin,UpdateView):
     template_name = 'profiles/profile_edit.html'
     success_url = reverse_lazy('view_profile')
 
-    def get_object(self,queryset=None):
+    def get_object(self, queryset=None):
         return self.request.user.profile
 
-    def form_valid(self,form):
-        messages.success(self.request,'Profile has been updated!')
+    def form_valid(self, form):
+        messages.success(self.request, 'Profile has been updated!')
         return super().form_valid(form)

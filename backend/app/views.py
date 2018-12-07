@@ -10,8 +10,9 @@ from backend.app.forms import PostForm
 
 class PostView(View):
     """"Сообщения пользователя"""
+
     def get(self, request):
-        posts = Post.objects.filter(twit__isnull=True)
+        posts = Post.objects.filter(twit__isnull=True, user=request.user)
         form = PostForm()
         return render(request, "app/index.html", {"posts": posts, "form": form})
 

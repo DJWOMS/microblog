@@ -1,10 +1,10 @@
 <div class="navbar navbar-dark bg-dark">
-    <ul class="navbar-nav mr-0">
+    <ul class="navbar-nav">
         {% if user.is_authenticated %}
-            <span style="color: #fff;">{{ user.username }}</span>
-            {#            {% if user.profile.avatar %}#}
-            <img style="width: 150px; height: 150px;" src="{{ user.profile.get_avatar_url }}">
-            {#            {% endif %}#}
+            <li class="nav-item my-0">
+                <span style="color: #fff;">{{ user.username }}</span>
+                <img style="width: 150px; height: 150px;" src="{{ user.profile.get_avatar_url }}">
+            </li>
             <li class="nav-item my-0">
                 <a class="nav-link" href="/accounts/logout/">Выход</a>
             </li>

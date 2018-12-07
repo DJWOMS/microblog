@@ -1,5 +1,5 @@
 {% load i18n account %}
-<form method="POST" action="{% url 'account_login' %}">
+<form method="POST" action="{% url 'account_login' %}" class="need_auth" >
     {% csrf_token %}
     {% if erorrs %}
         <ul class="errorlist">

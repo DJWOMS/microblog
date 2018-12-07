@@ -1,9 +1,17 @@
-<div class="navbar navbar-dark bg-dark">
-    <ul class="navbar-nav">
+<div class="navbar navbar-dark bg-dark menu">
+    <ul class="nav justify-content-end lighten-4 py-4">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Главная</a>
+        </li>
         {% if user.is_authenticated %}
             <li class="nav-item my-0">
-                <span style="color: #fff;">{{ user.username }}</span>
-                <img style="width: 150px; height: 150px;" src="{{ user.profile.get_avatar_url }}">
+                <a class="nav-link"
+                   href="{% url 'view_profile' %}"><span>
+                    {{ user.username }}</span>
+                </a>
+            </li>
+            <li class="nav-item my-0">
+                <img class="avatar" src="{{ user.profile.get_avatar_url }}">
             </li>
             <li class="nav-item my-0">
                 <a class="nav-link" href="/accounts/logout/">Выход</a>

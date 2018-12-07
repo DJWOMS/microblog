@@ -23,7 +23,7 @@ let like = function (id) {
             pk: id,
         },
         success: (response) => {
-            console.log("True")
+            window.location = response
         },
         error: (response) => {
             console.log("False")
@@ -31,16 +31,15 @@ let like = function (id) {
     })
 };
 // обработать форму авторизации с помощью ajax request.
-$(".need_auth").submit(function(e){
-         e.preventDefault();
-         var url = $(this).attr('action');
-         var data = $(this).serialize();
-         $.post(
-            url,
-            data,
-            function(response){
-                window.location = response;
-            },
-
-        );
-     });
+$(".need_auth").submit(function (e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    var data = $(this).serialize();
+    $.post(
+        url,
+        data,
+        function (response) {
+            window.location = response.location;
+        },
+    );
+});

@@ -2,13 +2,13 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Profile
 from .forms import ProfileForm
-from django.views import View
-from django.views.generic import UpdateView,DetailView
+from django.views.generic import UpdateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-class ProfileView(LoginRequiredMixin,DetailView):
+
+class ProfileView(LoginRequiredMixin, DetailView):
     model = Profile
     context_object_name = 'profile'
     template_name = 'profiles/profile_detail.html'
@@ -19,7 +19,8 @@ class ProfileView(LoginRequiredMixin,DetailView):
             raise Http404
         return obj
 
-class ProfileEditView(LoginRequiredMixin,UpdateView):
+
+class ProfileEditView(LoginRequiredMixin, UpdateView):
     form_class = ProfileForm
     model = Profile
     template_name = 'profiles/profile_edit.html'
@@ -31,3 +32,4 @@ class ProfileEditView(LoginRequiredMixin,UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Profile has been updated!')
         return super().form_valid(form)
+

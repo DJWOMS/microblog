@@ -1,3 +1,11 @@
+.menu {
+    margin: 0 0 15px 0;
+}
+.twit {
+    margin: 10px 0 15px 0;
+    box-shadow: 1px 7px 11px 0px #cecece;
+}
+
 .form-twit {
     width: 75%;
     height: 270px;
@@ -10,6 +18,8 @@
     display: none;
 }
 
-.fa-arrow-up {
-    display: none;
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50% 50%;
 }

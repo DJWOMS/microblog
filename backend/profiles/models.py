@@ -45,7 +45,7 @@ class Profile(models.Model):
             return '/static/img/default.png'
         
     def save(self,*args,**kwargs):
-        super().save(*args,**kwargs)
+        super().save(*args, **kwargs)
         if self.avatar:
             print("avatar detected")
             img = Image.open(self.avatar.path)

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
 
+    'bootstrap4',
+
     'backend.app',
     'backend.profiles',
 ]

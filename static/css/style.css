@@ -1,9 +1,16 @@
+body {
+    background: #f7f7f7;
+}
+
 .menu {
     margin: 0 0 15px 0;
 }
+
 .twit {
     margin: 10px 0 15px 0;
-    box-shadow: 1px 7px 11px 0px #cecece;
+    background: #ffffff;
+    border: 1px solid #cecece;
+    box-shadow: 1px 2px 12px 0px #cecece;
 }
 
 .form-twit {

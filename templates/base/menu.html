@@ -5,6 +5,9 @@
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item my-0">
+                <a class="nav-link" href="{% url 'posts' %}">Мои записи</a>
+            </li>
+            <li class="nav-item my-0">
                 <a class="nav-link"
                    href="{% url 'view_profile' %}"><span>
                     {{ user.username }}</span>

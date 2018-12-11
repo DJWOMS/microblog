@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 {% block content %}
     {% if user.is_active %}
         <div class="row form-twit">
-            <form action="" method="post">
+            <form action="{% url 'posts' %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-success small">Отправить</button>
+                <button type="submit" class="btn btn-success small">
+                    Отправить
+                </button>
             </form>
         </div>
     {% endif %}
@@ -14,6 +17,7 @@
             <div class="col-12"><p>{{ post.text }}</p></div>
             <div class="col-12"><b>
                 <small>{{ post.date }} - {{ post.user }}</small>
+                <button class="btn small" onclick="follow({{ post.user.id }})">Follow</button>
             </b></div>
             <div class="col-12">{{ post.like }} -
                 {% if user.is_authenticated %}
@@ -32,8 +36,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                Комментарии
-                <br>
+                Комментарии<br>
             </div>
         </div>
         {% if user.is_active %}
@@ -59,4 +62,5 @@
         <hr>
         <br>
     {% endfor %}
+    {% bootstrap_pagination page_obj %}
 {% endblock content %}

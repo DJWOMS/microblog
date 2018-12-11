@@ -1,11 +1,25 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from backend.app.models import Post
 from backend.app.forms import PostForm
+
+
+class AllTwit(ListView):
+    """Выводим все твиты"""
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'app/index.html'
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = PostForm()
+        return context
 
 
 class PostView(View):
@@ -17,7 +31,10 @@ class PostView(View):
         else:
             posts = Post.objects.filter(twit__isnull=True)
         form = PostForm()
-        return render(request, "app/index.html", {"posts": posts, "form": form})
+        paginator = Paginator(posts, 5)
+        page = request.GET.get("page")
+        page_obj = paginator.get_page(page)
+        return render(request, "app/index.html", {"posts": posts, "form": form, "page_obj": page_obj})
 
     def post(self, request):
         form = PostForm(request.POST)
@@ -28,7 +45,7 @@ class PostView(View):
                 form.twit = Post.objects.get(id=pk)
             form.user = request.user
             form.save()
-            return redirect("/")
+            return redirect("posts")
         else:
             return HttpResponse("error")
 

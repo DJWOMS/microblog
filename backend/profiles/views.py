@@ -1,5 +1,8 @@
-from django.http import Http404
+from django.contrib.auth.models import User
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
+
 from .models import Profile
 from .forms import ProfileForm
 from django.views.generic import UpdateView, DetailView
@@ -33,3 +36,12 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Profile has been updated!')
         return super().form_valid(form)
 
+
+class AddFollow(View):
+    """Подпись на пользователя"""
+    def post(self, request):
+        pk = request.POST.get("pk")
+        user = Profile.objects.get(id=pk)
+        user.follow.add(User.objects.get(id=request.user.id))
+        user.save()
+        return HttpResponse(status=201)

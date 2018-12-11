@@ -30,6 +30,22 @@ let like = function (id) {
         }
     })
 };
+// Подписаться
+let follow = function (id) {
+    $.ajax({
+        url: "http://127.0.0.1:8000/profile/follow/",
+        type: "POST",
+        data: {
+            pk: id,
+        },
+        success: (response) => {
+            window.location = response
+        },
+        error: (response) => {
+            console.log("False")
+        }
+    })
+};
 // обработать форму авторизации с помощью ajax request.
 $(".need_auth").submit(function (e) {
     e.preventDefault();

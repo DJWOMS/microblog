@@ -28,4 +28,3 @@ class Post(models.Model):
 
 
 
-

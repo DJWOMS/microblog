@@ -1,66 +1,113 @@
 {% extends 'base.html' %}
+{% load mptt_tags %}
 {% load bootstrap4 %}
 {% block content %}
+    <div class="main-tweet">
     {% if user.is_active %}
         <div class="row form-twit">
             <form action="{% url 'posts' %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-success small">
+                <button type="submit" class="btn btn-tweet">
                     Отправить
                 </button>
             </form>
         </div>
     {% endif %}
-    {% for post in posts %}
-        <div class="row twit">
-            <div class="col-12"><p>{{ post.text }}</p></div>
-            <div class="col-12"><b>
-                <small>{{ post.date }} - {{ post.user }}</small>
-                <button class="btn small" onclick="follow({{ post.user.id }})">Follow</button>
-            </b></div>
-            <div class="col-12">{{ post.like }} -
-                {% if user.is_authenticated %}
-                    <i class="fa fa-thumbs-o-up" aria-hidden="true" onclick="like({{ post.id }})">
-                    </i>
-                {% else %}
-                    <!-- выпадает форма регистрации,auth совершается без проблем,но redirects
-                    по какому-то странному адресу (или не находит csrftoken) -->
-                    <a href="/accounts/login/" data-toggle="modal" data-target="#loginModal">
-                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                        зарегистрируйтесь, поставить оценку
-                    </a>
+        {% recursetree posts %}
+            <li>
+                {{ node.text }}
+                {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ child }}
+                    </ul>
                 {% endif %}
-            </div>
-            <hr>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                Комментарии<br>
-            </div>
-        </div>
-        {% if user.is_active %}
-            <div class="row">
-                <div class="col-12">
-                    <i class="fa fa-arrow-down" aria-hidden="true"
-                       onclick="openForm({{ post.id }})"></i>
-
-                    <i class="fa fa-arrow-up"
-                       onclick="closeForm({{ post.id }})">
-                    </i>
-                </div>
-                <div class="col-12 comment" id="{{ post.id }}">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <input type="number" name="id" hidden value="{{ post.id }}">
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-success">Комментировать</button>
-                    </form>
-                </div>
-            </div>
-        {% endif %}
-        <hr>
-        <br>
-    {% endfor %}
-    {% bootstrap_pagination page_obj %}
+            </li>
+        {% endrecursetree %}
+        {#        {% if user.is_active %}#}
+        {#            <div class="row form-twit">#}
+        {#                <form action="{% url 'posts' %}" method="post">#}
+        {#                    {% csrf_token %}#}
+        {#                    {{ form.as_p }}#}
+        {#                    <button type="submit" class="btn btn-tweet">#}
+        {#                        Отправить#}
+        {#                    </button>#}
+        {#                </form>#}
+        {#            </div>#}
+        {#        {% endif %}#}
+        {#        {% for post in posts %}#}
+        {#            <div class="row tweet">#}
+        {#                <div class="col-12"><p>{{ post.text }}</p></div>#}
+        {#                <div class="col-12"><b>#}
+        {#                    <small>#}
+        {#                        {{ post.date }} -#}
+        {#                        <a href="{% url 'public_user_info' post.user.id %}">{{ post.user }}</a>#}
+        {#                    </small>#}
+        {##}
+        {#                </b></div>#}
+        {#                <div class="col-12">{{ post.like }} -#}
+        {#                    {% if user.is_authenticated %}#}
+        {#                        <i class="fa fa-thumbs-o-up" aria-hidden="true"#}
+        {#                           onclick="like({{ post.id }})">#}
+        {#                        </i>#}
+        {##}
+        {#                    {% else %}#}
+        {#                        <a href="/accounts/login/" data-toggle="modal" data-target="#loginModal">#}
+        {#                            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>#}
+        {#                            зарегистрируйтесь, поставить оценку#}
+        {#                        </a>#}
+        {#                    {% endif %}#}
+        {#                    {% if user.is_authenticated  and post.user != user %}#}
+        {#                        <button class="btn btn-follow" onclick="follow({{ post.user.id }})">#}
+        {#                            Follow#}
+        {#                        </button>#}
+        {#                    {% endif %}#}
+        {#                </div>#}
+        {#                <hr>#}
+        {#            </div>#}
+        {#            <div class="row tweet">#}
+        {#                <div class="col-12">#}
+        {#                    Комментарии#}
+        {#                    <i class="fa fa-arrow-down" aria-hidden="true"#}
+        {#                       onclick="openForm({{ post.id }})"></i>#}
+        {##}
+        {#                    <i class="fa fa-arrow-up"#}
+        {#                       onclick="closeForm({{ post.id }})">#}
+        {#                    </i>#}
+        {##}
+        {#                    {% if user.is_active %}#}
+        {#                        <div class="row">#}
+        {#                            <div class="col-12 comment" id="{{ post.id }}">#}
+        {#                                <form action="{% url 'posts' %}" method="post">#}
+        {#                                    {% csrf_token %}#}
+        {#                                    <input type="number" name="id" hidden value="{{ post.id }}">#}
+        {#                                    {{ form.as_p }}#}
+        {#                                    <button type="submit" class="btn btn-success">#}
+        {#                                        Комментировать#}
+        {#                                    </button>#}
+        {#                                </form>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                    {% endif %}#}
+        {#                </div>#}
+        {##}
+        {#                <div class="col-12">#}
+        {#                    {% for comm in post.child.all %}#}
+        {#                        {{ comm.text }}<br>#}
+        {#                        {{ comm.user }} -#}
+        {#                        {{ comm.date }}#}
+        {##}
+        {#                        {% for two_comm in comm.child.all %}#}
+        {#                            {{ comm.text }}<br>#}
+        {#                            {{ comm.user }} -#}
+        {#                            {{ comm.date }}#}
+        {#                        {% endfor %}#}
+        {#                        <hr>#}
+        {#                    {% endfor %}#}
+        {#                </div>#}
+        {##}
+        {#            </div>#}
+        {#        {% endfor %}#}
+        {#        {% bootstrap_pagination page_obj pages_to_show=4 %}#}
+    </div>
 {% endblock content %}

@@ -1,17 +1,22 @@
 from django.contrib.auth.models import User
 from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Post(models.Model):
+class Post(MPTTModel):
     """"Модель записи блога"""
 
-    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        verbose_name="Пользователь",
+        on_delete=models.CASCADE,
+        related_name='twits')
     text = models.TextField("Сообщение", max_length=500)
     date = models.DateTimeField("Дата", auto_now_add=True)
-    twit = models.ForeignKey(
+    parent = TreeForeignKey(
         "self",
         verbose_name="Твит",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="child")
@@ -21,10 +26,10 @@ class Post(models.Model):
     def __str__(self):
         return "{} - {}".format(self.id, self.user)
 
-    class Meta:
+    class MPTTMeta:
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
-        ordering = ["id"]
+        order_insertion_by = ["-id"]
 
 
 

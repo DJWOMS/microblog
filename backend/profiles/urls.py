@@ -5,4 +5,5 @@ urlpatterns = [
     path('', ProfileView.as_view(), name='view_profile'),
     path('edit_profile/', ProfileEditView.as_view(), name='edit_profile'),
     path('follow/', AddFollow.as_view(), name='add-follow'),
+    path('public-info/<int:pk>', PublicUserInfo.as_view(), name='public_user_info'),
 ]

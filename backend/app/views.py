@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView
@@ -12,6 +13,7 @@ from backend.app.forms import PostForm
 class AllTwit(ListView):
     """Выводим все твиты"""
     model = Post
+    queryset = Post.objects.filter(parent__isnull=True)
     context_object_name = 'posts'
     template_name = 'app/index.html'
     paginate_by = 5
@@ -27,9 +29,9 @@ class PostView(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            posts = Post.objects.filter(twit__isnull=True, user=request.user)
+            posts = Post.objects.filter(parent__isnull=True, user=request.user)
         else:
-            posts = Post.objects.filter(twit__isnull=True)
+            posts = Post.objects.filter(parent__isnull=True)
         form = PostForm()
         paginator = Paginator(posts, 5)
         page = request.GET.get("page")
@@ -63,3 +65,21 @@ class Like(LoginRequiredMixin, View):
             post.like += 1
         post.save()
         return HttpResponse(status=201)
+
+
+class PostsIfollow(LoginRequiredMixin, AllTwit):
+    model = Post
+    template_name = 'app/index.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        current_user = User.objects.get(id=self.request.user.id)
+        people_i_follow = current_user.follow_user.all()
+        lst_id = []
+        for user in people_i_follow:
+            lst_id.append(user.id)
+        qs = Post.objects.filter(
+            Q(user_id__in=self.request.user.follow_user.all()) |
+            Q(user=self.request.user))
+        return qs

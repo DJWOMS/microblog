@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from django.utils import timezone
 from PIL import Image
 import os
-#
 
 
 def get_path_upload_avatar(instance,file):

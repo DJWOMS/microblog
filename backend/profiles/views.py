@@ -12,6 +12,7 @@ from django.contrib import messages
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
+    """Вывод профиля пользователя"""
     model = Profile
     context_object_name = 'profile'
     template_name = 'profiles/profile_detail.html'
@@ -24,6 +25,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
+    """Редактирование профиля"""
     form_class = ProfileForm
     model = Profile
     template_name = 'profiles/profile_edit.html'
@@ -51,7 +53,7 @@ class PublicUserInfo(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         profile = self.get_object()
         user = User.objects.get(id=profile.id)
-        qs = user.twits.filter(twit__isnull=True)
+        qs = user.twits.all()
         return qs
 
     def get_context_data(self, **kwargs):

@@ -5,7 +5,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 class Post(MPTTModel):
     """"Модель записи блога"""
-
     user = models.ForeignKey(
         User,
         verbose_name="Пользователь",
@@ -29,7 +28,6 @@ class Post(MPTTModel):
     class MPTTMeta:
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
-        order_insertion_by = ["-id"]
 
 
 

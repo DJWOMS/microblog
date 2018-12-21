@@ -45,7 +45,7 @@ class PostView(LoginRequiredMixin, View):
                 form.parent = Post.objects.get(id=pk)
             form.user = request.user
             form.save()
-            return redirect("posts")
+            return redirect("home")
         else:
             return HttpResponse("error")
 

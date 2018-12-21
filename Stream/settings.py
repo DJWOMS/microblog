@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'rest_framework.authtoken',
+
     'allauth',
     'allauth.account',
+    'djoser',
 
     'bootstrap4',
-
-    'rest_framework',
 
     'debug_toolbar',
     'mptt',

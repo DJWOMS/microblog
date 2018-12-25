@@ -16,11 +16,18 @@ class ProfileSer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class UserProfileSerialiser(serializers.ModelSerializer):
+    """Сериализация пользователя по профилю"""
+    profile = ProfileSer()
+    class Meta:
+        model = User
+        fields = ("profile",)
+
+
 class PostSerializer(serializers.ModelSerializer):
     """Serializer твитов"""
-    user = ProfileSer()
+    user = UserProfileSerialiser()
     user_like = UserSerialiser(many=True)
-    profile = ProfileSer()
     class Meta:
         model = Post
         fields = ("id",
@@ -29,6 +36,19 @@ class PostSerializer(serializers.ModelSerializer):
                   "date",
                   "parent",
                   "like",
-                  "user_like",
-                  "profile")
+                  "user_like"
+                  )
 
+
+class EditAvatar(serializers.ModelSerializer):
+    """Редактирование автара"""
+    class Meta:
+        model = Profile
+        fields = ("avatar", )
+
+
+class EditNike(serializers.ModelSerializer):
+    """Редактирование ника"""
+    class Meta:
+        model = Profile
+        fields = ("nike", )

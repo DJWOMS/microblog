@@ -1,17 +1,38 @@
 <template>
     <div id="app">
-        <Menu></Menu>
+        <Menu @showLogin="setLogin(true)"></Menu>
+        <Login v-if="login" @hideLogin="setLogin(false)"></Login>
         <router-view/>
     </div>
 </template>
 
 <script>
     import Menu from '@/components/Menu.vue'
+    import Login from '@/components/Login.vue'
 
     export default {
         name: 'app',
         components: {
-            Menu
+            Menu,
+            Login,
+        },
+        data() {
+            return {
+                login: false,
+            }
+        },
+        created() {
+            if (sessionStorage.getItem("token")) {
+                this.$store.commit("set_auth", true)
+            }
+            else {
+                this.$store.commit("set_auth", false)
+            }
+        },
+        methods: {
+            setLogin(value) {
+                this.login = value
+            }
         }
     }
 </script>

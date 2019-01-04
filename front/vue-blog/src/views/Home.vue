@@ -23,7 +23,6 @@
                 type: "GET",
                 success: (response) => {
                     this.tweets = response
-                    console.log(response)
                 }
             })
         }

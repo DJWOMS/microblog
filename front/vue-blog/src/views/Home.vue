@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <Tweets :tweet="tweets"></Tweets>
+        <Tweets :tweet="tweets" @reload="loadTweets"></Tweets>
     </div>
 </template>
 
@@ -18,13 +18,18 @@
             }
         },
         created() {
-            $.ajax({
-                url: this.$store.getters.get_url_server + 'api/v1/app/',
-                type: "GET",
-                success: (response) => {
-                    this.tweets = response
-                }
-            })
+            this.loadTweets()
+        },
+        methods: {
+            loadTweets() {
+                $.ajax({
+                    url: this.$store.getters.get_url_server + 'api/v1/app/',
+                    type: "GET",
+                    success: (response) => {
+                        this.tweets = response
+                    }
+                })
+            }
         }
     }
 </script>

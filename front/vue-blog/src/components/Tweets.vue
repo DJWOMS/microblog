@@ -11,16 +11,16 @@
             <div class="col-12"><p>{{ node.text }}</p></div>
             <div class="col-12"><b>
                 <small>
-                    {{ node.date }} -
+                    {{ node.date|filterDateTime }} -
                     <a href="">{{ node.user.username }}</a>
                 </small>
 
             </b></div>
             <div class="col-12">{{ node.like }} -
-                <!--{% if user.is_authenticated %}-->
-                <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"-->
-                <!--onclick="like({{ node.id }})">-->
+                <!--<i v-if="auth" class="fa fa-thumbs-o-up" aria-hidden="true"-->
+                <!--@click="like(node.id)">-->
                 <!--</i>-->
+                <button v-if="auth" @click="like(node.id)" class="btn btn-tweet small">Like</button>
                 <!--{% else %}-->
                 <!--<a href="/accounts/login/" data-toggle="modal" data-target="#loginModal">-->
                 <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>-->
@@ -28,10 +28,11 @@
                 <!--</a>-->
                 <!--{% endif %}-->
                 <!--{% if user.is_authenticated and node.user != user %}-->
-                <!--<button class="btn btn-follow" onclick="follow(node.user.id)">-->
-                <!--Follow-->
-                <!--</button>-->
-                <!--{% endif %}-->
+                <button v-if="auth && get_user_info.user.id != node.user.id"
+                        class="btn btn-follow"
+                        @click="follow(node.user.id)">
+                    Follow
+                </button>
             </div>
             <hr>
         </div>
@@ -74,10 +75,61 @@
 </template>
 
 <script>
+    import auth from '@/mixins/computedAuth.js'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "Tweets",
         props: {
             tweet: ''
+        },
+        mixins: [
+            auth
+        ],
+        computed: {
+            ...mapGetters([
+                'get_user_info'
+            ])
+        },
+        methods: {
+            like(id) {
+                $.ajax({
+                    url: this.$store.getters.get_url_server + "api/v1/app/like/",
+                    type: "POST",
+                    data: {
+                        pk: id,
+                    },
+                    success: (response) => {
+                        this.$emit("reload")
+                    },
+                    error: (response) => {
+                        console.log("False")
+                    }
+                })
+            },
+            follow(id) {
+                $.ajax({
+                    url: this.$store.getters.get_url_server + "api/v1/profile/follow/",
+                    type: "POST",
+                    data: {
+                        pk: id,
+                    },
+                    success: (response) => {
+                        this.$emit("reload")
+                    },
+                    error: (response) => {
+                        console.log("False")
+                    }
+                })
+            }
+        },
+        filters: {
+            // Фильтр полной даты числами
+            filterDateTime(item) {
+                let old_date = new Date(item)
+                return `
+                 ${old_date.getDate()}.${old_date.getMonth()}.${old_date.getFullYear()} - ${old_date.getHours()}:${old_date.getMinutes()}`
+            },
         }
     }
 </script>

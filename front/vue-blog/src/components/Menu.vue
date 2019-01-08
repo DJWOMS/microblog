@@ -53,14 +53,13 @@
 </template>
 
 <script>
+    import auth from '@/mixins/computedAuth.js'
+
     export default {
         name: "Menu",
-        computed: {
-            auth() {
-                if (this.$store.getters.get_auth) return true
-                else return false
-            }
-        },
+        mixins: [
+            auth
+        ],
         methods: {
             goPage(item) {
                 this.$router.push({name: item})

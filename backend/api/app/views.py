@@ -63,3 +63,6 @@ class PostIFollow(APIView):
         )
         ser = PostSerializer(qs, many=True)
         return Response(ser.data)
+
+
+

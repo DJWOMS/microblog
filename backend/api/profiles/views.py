@@ -57,3 +57,13 @@ class UpdateNike(APIView):
         else:
             return Response(status=400)
 
+
+class AddFollow(APIView):
+    """Подпись на пользователя"""
+    def post(self, request):
+        pk = request.data.get("pk")
+        user = Profile.objects.get(id=pk)
+        user.follow.add(User.objects.get(id=request.user.id))
+        user.save()
+        return Response(status=201)
+

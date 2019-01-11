@@ -1,12 +1,13 @@
 <template>
     <div class="main-tweet">
-        <!--<div class="row form-twit">-->
-        <!--<form action="{% url 'posts' %}" method="post">-->
-        <!--<button type="submit" class="btn btn-tweet">-->
-        <!--Отправить-->
-        <!--</button>-->
-        <!--</form>-->
-        <!--</div>-->
+        <div class="row form-twit">
+            <form action="" method="post">
+                <textarea v-model="post" rows="2" cols="80" class="form-control"></textarea>
+                <button @click="sendPost" type="button" class="btn btn-tweet">
+                    Отправить
+                </button>
+            </form>
+        </div>
         <div class="row tweet" v-for="node in tweet">
             <div class="col-12"><p>{{ node.text }}</p></div>
             <div class="col-12"><b>
@@ -14,20 +15,14 @@
                     {{ node.date|filterDateTime }} -
                     <a href="">{{ node.user.username }}</a>
                 </small>
-
             </b></div>
             <div class="col-12">{{ node.like }} -
-                <!--<i v-if="auth" class="fa fa-thumbs-o-up" aria-hidden="true"-->
-                <!--@click="like(node.id)">-->
-                <!--</i>-->
-                <button v-if="auth" @click="like(node.id)" class="btn btn-tweet small">Like</button>
-                <!--{% else %}-->
-                <!--<a href="/accounts/login/" data-toggle="modal" data-target="#loginModal">-->
-                <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>-->
-                <!--зарегистрируйтесь, поставить оценку-->
-                <!--</a>-->
-                <!--{% endif %}-->
-                <!--{% if user.is_authenticated and node.user != user %}-->
+                <mdb-icon icon="fa fa-thumbs-o-up"
+                          v-if="auth"
+                          @click="like(node.id)"
+                          class="fa fa-thumbs-o-up">
+                </mdb-icon>
+                <!--<button v-if="auth" @click="like(node.id)" class="btn btn-tweet small">Like</button>-->
                 <button v-if="auth && get_user_info.user.id != node.user.id"
                         class="btn btn-follow"
                         @click="follow(node.user.id)">
@@ -35,9 +30,7 @@
                 </button>
             </div>
             <hr>
-        </div>
-        <div class="row tweet">
-            <div class="col-12">
+            <div class="col-12 tweet">
                 Комментарии
                 <!--{{ node.get_descendant_count }}-->
                 <!--<i class="fa fa-arrow-down" aria-hidden="true"-->
@@ -86,6 +79,11 @@
         mixins: [
             auth
         ],
+        data() {
+            return {
+                post: '',
+            }
+        },
         computed: {
             ...mapGetters([
                 'get_user_info'
@@ -113,6 +111,21 @@
                     type: "POST",
                     data: {
                         pk: id,
+                    },
+                    success: (response) => {
+                        this.$emit("reload")
+                    },
+                    error: (response) => {
+                        console.log("False")
+                    }
+                })
+            },
+            sendPost() {
+                $.ajax({
+                    url: this.$store.getters.get_url_server + "api/v1/app/my/",
+                    type: "POST",
+                    data: {
+                        text: this.post,
                     },
                     success: (response) => {
                         this.$emit("reload")

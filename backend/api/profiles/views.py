@@ -16,6 +16,8 @@ class ProfileUser(APIView):
 
     def get(self, request):
         ser = ProfileSer(Profile.objects.get(user=request.user))
+        i_follow = Profile.objects.filter(follow=request.user).values_list('id', flat=True)
+        print(i_follow)
         return Response(ser.data)
 
 
@@ -45,7 +47,7 @@ class UpdateProfile(APIView):
 
 
 class UpdateNike(APIView):
-    """Редактирование профиля"""
+    """Редактирование ника пользователя"""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):

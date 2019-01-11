@@ -35,6 +35,19 @@ class UserTweet(APIView):
             return Response(status=400)
 
 
+class PostIFollow(APIView):
+    """Твиты пользователя и его посдписчиков"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        qs = Post.objects.filter(
+            Q(user_id__in=request.user.profile.get_followers) |
+            Q(user_id=request.user.id)
+        )
+        ser = PostSerializer(qs, many=True)
+        return Response(ser.data)
+
+
 class Like(APIView):
     """Ставим лайк"""
     permission_classes = [permissions.IsAuthenticated]
@@ -50,19 +63,5 @@ class Like(APIView):
             post.like += 1
         post.save()
         return Response(status=201)
-
-
-class PostIFollow(APIView):
-    """Твиты пользователя и его посдписчиков"""
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        qs = Post.objects.filter(
-            Q(user_id__in=request.user.profile.get_followers) |
-            Q(user_id=request.user.id)
-        )
-        ser = PostSerializer(qs, many=True)
-        return Response(ser.data)
-
 
 

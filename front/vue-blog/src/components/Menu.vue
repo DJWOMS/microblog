@@ -15,27 +15,31 @@
                 </li>
             </ul>
             <ul class="navbar-nav mr-0">
-                <!--{% if user.is_authenticated %}-->
                 <li class="nav-item">
-                    <a v-if="auth" class="nav-link" href="#">My Posts + Whom I follow
+                    <a v-if="auth" @click="goPage('my_follow_tweets')" class="nav-link" href="#">
+                        My Posts + Whom I follow
                     </a>
                 </li>
                 <li class="nav-item my-0">
-                    <a v-if="auth"  @click="goPage('my_tweets')" class="nav-link" href="#">Мои записи</a>
+                    <a v-if="auth" @click="goPage('my_tweets')" class="nav-link" href="#">
+                        Мои записи
+                    </a>
                 </li>
                 <li class="nav-item my-0">
-                    <a class="nav-link"
+                    <a v-if="auth"
+                       @click="goPage('profile')"
+                       class="nav-link"
                        href="#">
-                        <!--<span>{{ user.username }}</span>-->
+                        <span>{{ $store.getters.get_user_info.user.username }}</span>
                     </a>
                 </li>
                 <li class="nav-item my-0">
-                    <img class="avatar" src="">
+                    <img v-if="auth" class="avatar"
+                         :src="$store.getters.get_url_media + $store.getters.get_user_info.avatar">
                 </li>
                 <li class="nav-item my-0">
                     <a v-if="auth" @click="logout" class="nav-link" href="#">Выход</a>
                 </li>
-                <!--{% else %}-->
                 <li class="nav-item my-0">
                     <a v-if="!auth"
                        @click="goLogin"
@@ -46,7 +50,6 @@
                         Вход
                     </a>
                 </li>
-                <!--{% endif %}-->
             </ul>
         </div>
     </div>
@@ -86,5 +89,11 @@
         display: flex;
         flex: 0 0 auto;
         width: 100%;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50% 50%;
     }
 </style>

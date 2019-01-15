@@ -28,8 +28,12 @@ class UserTweet(APIView):
 
     def post(self, request):
         ser = AddTweetSerializer(data=request.data)
+        print(request.data.get("id"))
         if ser.is_valid():
-            ser.save(user=request.user)
+            if request.data.get("id"):
+                ser.save(parent_id=request.data.get("id"), user=request.user)
+            else:
+                ser.save(user=request.user)
             return Response(status=200)
         else:
             return Response(status=400)

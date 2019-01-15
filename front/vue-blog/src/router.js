@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import MyTweets from './views/MyTweets'
-import MyFollowTweets from './views/MyFollowTweets'
 
 import Profile from './views/Profile'
 
@@ -21,7 +19,7 @@ export default new Router({
         {
             path: '/my',
             name: 'my_tweets',
-            component: MyTweets,
+            component: Home,
             beforeEnter: (to, from, next) => {
                 if (store.getters.get_auth) {
                     next()
@@ -33,7 +31,7 @@ export default new Router({
         {
             path: '/my-follow',
             name: 'my_follow_tweets',
-            component: MyFollowTweets,
+            component: Home,
             beforeEnter: (to, from, next) => {
                 if (store.getters.get_auth) {
                     next()

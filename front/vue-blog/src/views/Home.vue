@@ -14,7 +14,20 @@
         },
         data() {
             return {
-                tweets: ""
+                tweets: "",
+                url: 'api/v1/app/',
+            }
+        },
+        watch: {
+            '$route.name'() {
+                if (this.$route.name === 'home') {
+                    this.url = 'api/v1/app/'
+                } else if (this.$route.name === 'my_tweets') {
+                    this.url = 'api/v1/app/my/'
+                } else if (this.$route.name === 'my_follow_tweets') {
+                    this.url = 'api/v1/app/favorites/'
+                }
+                this.loadTweets()
             }
         },
         created() {
@@ -23,7 +36,7 @@
         methods: {
             loadTweets() {
                 $.ajax({
-                    url: this.$store.getters.get_url_server + 'api/v1/app/',
+                    url: this.$store.getters.get_url_server + this.url,
                     type: "GET",
                     success: (response) => {
                         this.tweets = response

@@ -11,10 +11,19 @@ class UserSerialiser(serializers.ModelSerializer):
         fields = ("id", "username")
 
 
+class PostParentSerializer(serializers.ModelSerializer):
+    """Serializer parent твитов"""
+    class Meta:
+        model = Post
+        fields = ("parent",
+                  "level")
+
+
 class PostSerializer(serializers.ModelSerializer):
     """Serializer твитов"""
     user = UserSerialiser()
     user_like = UserSerialiser(many=True)
+    parent = PostParentSerializer()
     class Meta:
         model = Post
         fields = ("id",

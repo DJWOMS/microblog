@@ -11,19 +11,18 @@ class UserSerialiser(serializers.ModelSerializer):
         fields = ("id", "username")
 
 
-class PostParentSerializer(serializers.ModelSerializer):
+class SubCategorySerializer(serializers.ModelSerializer):
     """Serializer parent твитов"""
     class Meta:
         model = Post
-        fields = ("parent",
-                  "level")
+        fields = ("id", "text", "child",)
 
 
 class PostSerializer(serializers.ModelSerializer):
     """Serializer твитов"""
     user = UserSerialiser()
     user_like = UserSerialiser(many=True)
-    parent = PostParentSerializer()
+    subtweet = SubCategorySerializer(source="child", many=True, required=False)
     class Meta:
         model = Post
         fields = ("id",
@@ -32,7 +31,8 @@ class PostSerializer(serializers.ModelSerializer):
                   "date",
                   "parent",
                   "like",
-                  "user_like")
+                  "user_like",
+                  "subtweet")
 
 
 class AddTweetSerializer(serializers.ModelSerializer):

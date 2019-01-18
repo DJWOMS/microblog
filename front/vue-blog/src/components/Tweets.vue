@@ -43,7 +43,9 @@
                 <div class="row">
                     <div class="col-12 comment" v-if="showComments == node.id">
                         <ul class="children">
-                            {{ node.text }}
+                            <div class="col-12" v-for="sub in node.subtweet">
+                                {{ sub.text }}
+                            </div>
                         </ul>
                     </div>
                     <div class="col-12" v-if="auth && showComments == node.id">
